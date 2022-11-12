@@ -33,6 +33,8 @@ struct LocalizableChecker {
         foreachLine(inFile: sourceFilePath, apply: { line in
             checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, expectedMinimalNbTimes: expectedMinimalNbTimes)
         })
+        
+        print("✅ finished!")
     }
     
     /// Check if current line is used in all files from directory.
