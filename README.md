@@ -49,8 +49,8 @@ Ready? Tap any key to start.
 🚀 running ...
 (It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)
 
-🛑 key '"mpv.position"' is unused (found only 1 time).
-🛑 key '"wv.title"' is unused (found only 1 time).
+🛑 key '"mpv.position"' is unused (found 1 time).
+🛑 key '"wv.title"' is unused (found 1 time).
 
 🎉 finished!
 ```
