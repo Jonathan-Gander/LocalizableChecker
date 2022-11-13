@@ -27,6 +27,10 @@ struct LocalizableChecker {
     // If you have allowed only .swift files (in allowedFilesExtensions variable), you can set this value to 0.
     static let expectedMinimalNbTimes: Int = 0
     
+    // Set this to true to also check if a key has an empty value. For example, this line would be logged: "mv.help.text" = "";
+    // This will add a message in log when an empty value is found.
+    static let logEmptyValues = true
+    
     // Set this to true to print when a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)
     static let anxiousMode = false
     
@@ -38,13 +42,17 @@ struct LocalizableChecker {
         print("Created by Jonathan Gander")
         print("--------------------------------------------------------\n")
 
-        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)")
+        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
         
         if allowedFilesExtensions.count > 0 {
-            print("Warning, only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).")
+            print("ℹ️ Will check only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).\n")
         }
         
-        print("\nReady? Tap any key to start.")
+        if logEmptyValues {
+            print("ℹ️ Empty values will be logged.\n")
+        }
+        
+        print("Ready? Tap any key to start.")
         let _ = readLine()
         print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
         
@@ -166,7 +174,10 @@ struct LocalizableChecker {
         
         guard key.hasPrefix("\"") && key.hasSuffix("\"") else { return nil }
         
-        return key
+        if logEmptyValues && components[1].trimmingCharacters(in: .whitespacesAndNewlines) == "\"\";" {
+            print("⚠️ warning, key '\(key)' has an empty value.")
+        }
         
+        return key
     }
 }
