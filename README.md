@@ -1,5 +1,5 @@
 # LocalizableChecker
-A Swift CLI to check if a key from a Localizable.strings file is unused in your project.
+A Swift CLI to check if keys from a Localizable.strings file are unused in your project.
 
 When you're building a translated app, you create a lot of translation keys and values. Sometimes you remove some code but you forget to remove matched translation keys. Your translation file is getting longer and you lose time to translate keys that are not yet used in your app.
 
@@ -32,7 +32,7 @@ Typical output log:
 
 ```
 👋 Welcome in LocalizableChecker
-This tool will check if a key from a Localizable.strings file is unused in your project.
+This tool will check if keys from a Localizable.strings file are unused in your project.
 Created by Jonathan Gander
 --------------------------------------------------------
 
@@ -46,8 +46,8 @@ Ready? Tap any key to start.
 🚀 running ...
 (It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)
 
-🛑 key '"mpv.position"' is unused (found 1 time).
-🛑 key '"wv.title"' is unused (found 1 time).
+🛑 key '"mpv.position"' is unused (found only 1 time).
+🛑 key '"wv.title"' is unused (found only 1 time).
 
 🎉 finished!
 ```
