@@ -29,7 +29,7 @@ struct LocalizableChecker {
     static func main() async throws {
         
         print("👋 Welcome in LocalizableChecker")
-        print("This tool will check if a key from a Localizable.strings file is unused in your project.")
+        print("This tool will check if keys from a Localizable.strings file are unused in your project.")
         print("Created by Jonathan Gander")
         print("--------------------------------------------------------\n")
 
@@ -65,7 +65,7 @@ struct LocalizableChecker {
         })
         
         if nbFound <= expectedMinimalNbTimes {
-            print("🛑 key '\(key)' is unused (found \(nbFound) \(nbFound > 1 ? "times" : "time")).")
+            print("🛑 key '\(key)' is unused (found only \(nbFound) \(nbFound > 1 ? "times" : "time")).")
         }
         else if anxiousMode {
             print("✅ key '\(key)' is used \(nbFound) \(nbFound > 1 ? "times" : "time").")
