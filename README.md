@@ -13,11 +13,14 @@ Git clone project and open it.
 
 ### Settings
 
-Before running this tool, you have to modify 3 variables:
+Before running this tool, you have to modify 4 variables:
 
 - `sourceFilePath`: It's the path to your `Localizable.strings` in which it will check keys. Include the file name and its extension.
 - `projectPath`: It's the path of your project in which each key will be checked. (The file set in `sourceFilePath` could be in this directory.)
-- `expectedMinimalNbTimes`: It's the number of time you expect each key to be in files at least. For example, if you have two Localizable.strings files (for two languages), set this value to 2, because you're sure it will appear at least 2 times in browsed files. If it appears only 2 times (or less), that means it is unused in your project.
+- `allowedFilesExtensions`: You can choose to only search in files with specific extensions. For example, if you want to check only in Swift files, you can set to `["swift"]` (do not add the dot).  
+Setting specific extensions will make faster search.
+- `expectedMinimalNbTimes`: It's the number of time you expect each key to be in files at least. For example, if you have two Localizable.strings files (for two languages), set this value to 2, because you're sure it will appear at least 2 times in browsed files. If it appears only 2 times (or less), that means it is unused in your project.  
+If you have allowed only `.swift` files (in `allowedFilesExtensions` variable), you can set this value to 0 (because `.strings` files will be skipped).
 
 ### Run
 
