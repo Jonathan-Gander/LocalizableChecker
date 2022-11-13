@@ -24,7 +24,31 @@ Before running this tool, you have to modify 3 variables:
 Then run the tool, tap any key to start... and wait.  
 As it will open each file for each key, it may take long.
 
-If you are impatient and feel anxious of seeing nothing printed, you can set `anxiousMode` to `true`. I will print everytime a key is found in your project.
+If you are impatient and feel anxious of seeing nothing printed, you can set `anxiousMode` to `true`. It will print everytime a key is found in your project.
+
+### Output
+
+Typical output log: 
+
+```
+👋 Welcome in LocalizableChecker
+This tool will check if a key from a Localizable.strings file is unused in your project.
+Created by Jonathan Gander
+
+Will check keys from file...
+	/Users/user/Projects/myproject/myproject/Resources/en.lproj/Localizable.strings
+in files from directory...
+	/Users/user/Projects/myproject
+
+Ready? Tap any key to start.
+
+🚀 running ...
+(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)
+
+🛑 key '"mpv.position"' is unused
+🛑 key '"wv.title"' is unused
+🎉 finished!
+```
 
 ## Licence
 
