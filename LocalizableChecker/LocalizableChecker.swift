@@ -74,7 +74,7 @@ struct LocalizableChecker {
         })
         
         if nbFound <= expectedMinimalNbTimes {
-            print("🛑 key '\(key)' is unused (found only \(nbFound) \(nbFound > 1 ? "times" : "time")).")
+            print("🛑 key '\(key)' is unused (found \(nbFound) \(nbFound > 1 ? "times" : "time")).")
         }
         else if anxiousMode {
             print("✅ key '\(key)' is used \(nbFound) \(nbFound > 1 ? "times" : "time").")
