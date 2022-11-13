@@ -52,6 +52,10 @@ struct LocalizableChecker {
             print("ℹ️ Empty values will be logged.\n")
         }
         
+        if anxiousMode {
+            print("ℹ️ Anxious mode is enabled. It will print a lot of text. Set anxiousMode variable to false to only log unused keys.\n")
+        }
+        
         print("Ready? Tap any key to start.")
         let _ = readLine()
         print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
