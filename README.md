@@ -50,7 +50,7 @@ Will check keys from file...
 in files from directory...
 	/Users/user/Projects/myproject
 
-ℹ️ Will check only check in files with extensions: swift.
+ℹ️ Will only check in files with extensions: swift.
 
 ℹ️ Empty values will be logged.
 
