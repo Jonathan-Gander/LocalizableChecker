@@ -24,7 +24,7 @@ Before running this tool, you have to modify 3 variables:
 Then run the tool, tap any key to start... and wait.  
 As it will open each file for each key, it may take long.
 
-If you are impatient and feel anxious of seeing nothing printed, you can add a set `anxiousMode` to `true`. I will print everytime a key is found in your project.
+If you are impatient and feel anxious of seeing nothing printed, you can set `anxiousMode` to `true`. I will print everytime a key is found in your project.
 
 ## Licence
 
