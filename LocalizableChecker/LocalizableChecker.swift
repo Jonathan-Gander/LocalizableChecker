@@ -17,10 +17,15 @@ struct LocalizableChecker {
     // Path to your project or directory in which each key will be check.
     static let projectPath = "/Users/user/Projects/myproject"
     
-    // How many times each key appears at least in your projectPath directory and is considered unused.
+    // Set extensions of files in which you want to find keys. If you let this array empty, will check in all files. Do not add a dot.
+    // For example: ["swift"] to only check in Swift files.
+    static let allowedFilesExtensions: [String] = ["swift"]
+    
+    // How many times you know each key will appear at least in your projectPath directory (in files with allowed extensions) so it is considered unused.
     // Note: For example, if you have two Localizable.strings files (for two languages), set this to 2.
-    //       Because you're sure it will appear at least 2 times in browsed files.
-    static let expectedMinimalNbTimes: Int = 1
+    //       Because you're sure each key will appear at least 2 times in browsed files.
+    // If you have allowed only .swift files (in allowedFilesExtensions variable), you can set this value to 0.
+    static let expectedMinimalNbTimes: Int = 0
     
     // Set this to true to print when a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)
     static let anxiousMode = false
@@ -33,9 +38,13 @@ struct LocalizableChecker {
         print("Created by Jonathan Gander")
         print("--------------------------------------------------------\n")
 
-        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
+        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)")
         
-        print("Ready? Tap any key to start.")
+        if allowedFilesExtensions.count > 0 {
+            print("Warning, only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).")
+        }
+        
+        print("\nReady? Tap any key to start.")
         let _ = readLine()
         print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
         
@@ -108,7 +117,9 @@ struct LocalizableChecker {
                 }
             }
             else {
-                apply(itemURL.path)
+                if allowedFilesExtensions.count == 0 || allowedFilesExtensions.contains(itemURL.pathExtension.lowercased()) {
+                    apply(itemURL.path)
+                }
             }
         }
     }
