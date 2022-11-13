@@ -34,6 +34,7 @@ Typical output log:
 👋 Welcome in LocalizableChecker
 This tool will check if a key from a Localizable.strings file is unused in your project.
 Created by Jonathan Gander
+--------------------------------------------------------
 
 Will check keys from file...
 	/Users/user/Projects/myproject/myproject/Resources/en.lproj/Localizable.strings
@@ -45,8 +46,9 @@ Ready? Tap any key to start.
 🚀 running ...
 (It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)
 
-🛑 key '"mpv.position"' is unused
-🛑 key '"wv.title"' is unused
+🛑 key '"mpv.position"' is unused (found 1 time).
+🛑 key '"wv.title"' is unused (found 1 time).
+
 🎉 finished!
 ```
 
