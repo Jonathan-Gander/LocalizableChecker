@@ -22,19 +22,27 @@ struct LocalizableChecker {
     //       Because you're sure it will appear at least 2 times in browsed files.
     static let expectedMinimalNbTimes: Int = 1
     
+    // Set this to true to print when a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)
+    static let anxiousMode = false
+    
     // MARK: - Main
     static func main() async throws {
         
         print("👋 Welcome in LocalizableChecker")
-        print("Copyright Jonathan Gander\n")
+        print("This tool will check if a key from a Localizable.strings file is unused in your project.")
+        print("Created by Jonathan Gander\n")
 
-        print("running ... (it may be quite long!)")
+        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
+        
+        print("Ready? Tap any key to start.")
+        let _ = readLine()
+        print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
         
         foreachLine(inFile: sourceFilePath, apply: { line in
             checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, expectedMinimalNbTimes: expectedMinimalNbTimes)
         })
         
-        print("✅ finished!")
+        print("🎉 finished!")
     }
     
     /// Check if current line is used in all files from directory.
@@ -57,6 +65,9 @@ struct LocalizableChecker {
         
         if nbFound <= expectedMinimalNbTimes {
             print("🛑 key '\(key)' is unused")
+        }
+        else if anxiousMode {
+            print("✅ key '\(key)' is used \(nbFound) times.")
         }
     }
     
