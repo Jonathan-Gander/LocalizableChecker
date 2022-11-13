@@ -5,7 +5,7 @@ When you're building a translated app, you create a lot of translation keys and 
 
 This tool is for you! It will print every key from a `Localizable.strings` file that are not used in your app.
 
-And, it will also log if a key as an empty value, such as `"mv.help.text" = "";`.
+And, it will also log if a key has an empty value, such as `"mv.help.text" = "";`.
 
 ## Usage 
 
