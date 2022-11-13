@@ -30,7 +30,8 @@ struct LocalizableChecker {
         
         print("👋 Welcome in LocalizableChecker")
         print("This tool will check if a key from a Localizable.strings file is unused in your project.")
-        print("Created by Jonathan Gander\n")
+        print("Created by Jonathan Gander")
+        print("--------------------------------------------------------\n")
 
         print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
         
@@ -42,7 +43,7 @@ struct LocalizableChecker {
             checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, expectedMinimalNbTimes: expectedMinimalNbTimes)
         })
         
-        print("🎉 finished!")
+        print("\n🎉 finished!")
     }
     
     /// Check if current line is used in all files from directory.
@@ -64,10 +65,10 @@ struct LocalizableChecker {
         })
         
         if nbFound <= expectedMinimalNbTimes {
-            print("🛑 key '\(key)' is unused")
+            print("🛑 key '\(key)' is unused (found \(nbFound) \(nbFound > 1 ? "times" : "time")).")
         }
         else if anxiousMode {
-            print("✅ key '\(key)' is used \(nbFound) times.")
+            print("✅ key '\(key)' is used \(nbFound) \(nbFound > 1 ? "times" : "time").")
         }
     }
     
