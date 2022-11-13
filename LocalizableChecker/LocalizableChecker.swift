@@ -45,7 +45,7 @@ struct LocalizableChecker {
         print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
         
         if allowedFilesExtensions.count > 0 {
-            print("ℹ️ Will check only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).\n")
+            print("ℹ️ Will only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).\n")
         }
         
         if logEmptyValues {
