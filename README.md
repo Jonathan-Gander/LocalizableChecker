@@ -22,7 +22,9 @@ Before running this tool, you have to modify 3 variables:
 ### Run
 
 Then run the tool ... and wait.  
-As it will open each file for each key, it may take long. If you are impatient, you can add a `else` after `if nbFound <= expectedMinimalNbTimes { ... }` to log when a key is used. ;)
+As it will open each file for each key, it may take long.
+
+If you are impatient and feel anxious of seeing nothing printed, you can add a set `anxiousMode` to `true`. I will print everytime a key is found in your project.
 
 ## Licence
 
