@@ -190,8 +190,16 @@ struct LocalizableChecker: ParsableCommand {
         
         guard key.hasPrefix("\"") && key.hasSuffix("\"") else { return nil }
         
-        if logEmptyValues && components[1].trimmingCharacters(in: .whitespacesAndNewlines) == "\"\";" {
-            print("⚠️ warning, key '\(key)' has an empty value.")
+        if logEmptyValues {
+            var value = components[1].trimmingCharacters(in: .whitespacesAndNewlines)
+            if value.hasSuffix(";") {
+                value.removeLast()
+                value = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                if value == "\"\"" {
+                    print("⚠️ warning, key '\(key)' has an empty value.")
+                }
+            }
         }
         
         return key
