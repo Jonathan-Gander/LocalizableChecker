@@ -1,52 +1,53 @@
 //
-//  main.swift
-//  LocalizableChecker
+//  LocalizableChecker.swift
 //
-//  Created by Jonathan Gander on 12.11.22.
+//  Created by Jonathan Gander on 14.11.22.
 //
-
 import Foundation
+import ArgumentParser
 
 @main
-struct LocalizableChecker {
+struct LocalizableChecker: ParsableCommand {
     
-    // Path to file where are the keys (including file name and its extension)
-    // For example, your Localizable.strings file.
-    static let sourceFilePath = "/Users/user/Projects/myproject/myproject/Resources/en.lproj/Localizable.strings"
+    // MARK: - Arguments
+    @Argument(help: "Path to file where are the keys to check (including filename and its extension).")
+    var sourceFilePath: String
     
-    // Path to your project or directory in which each key will be check.
-    static let projectPath = "/Users/user/Projects/myproject"
+    @Argument(help: "Path to your project or directory in which each key will be check.")
+    var projectPath: String
     
-    // Set extensions of files in which you want to find keys. If you let this array empty, will check in all files. Do not add a dot.
-    // For example: ["swift"] to only check in Swift files.
-    static let allowedFilesExtensions: [String] = ["swift"]
+    @Argument(help: "Number of times each key will be found at least. For example, if you search in all files and your project directory contains two Localizable.strings files (one for each language), this value should be 2. Because you are sure all keys will be found at least two times. That means, if a key is found two times (or less), it is unused in your project because it only appears in your two Localizable.strings files. If you set 'extensions' option to only search in .swift files for example, you can set this argument to 0.")
+    var allowNbTimes: Int
+
+    // MARK: - Options
+    @Option(name: [.customLong("extensions"), .long],
+            help: "Set extensions of files in which you want to search for keys. If you don't set this parameter, it will search in all files. Do not add a dot, only extensions, spearated by a comma.",
+            transform: { str in
+        if str.contains(",") {
+            return str.split(separator: ",").map({ String($0) })
+        }
+        else {
+            return [str]
+        }
+    })
+    var allowedFilesExtensions: [String] = []
     
-    // How many times you know each key will appear at least in your projectPath directory (in files with allowed extensions) so it is considered unused.
-    // Note: For example, if you have two Localizable.strings files (for two languages), set this to 2.
-    //       Because you're sure each key will appear at least 2 times in browsed files.
-    // If you have allowed only .swift files (in allowedFilesExtensions variable), you can set this value to 0.
-    static let expectedMinimalNbTimes: Int = 0
+    @Flag(help: "Add this option to also check if a key has an empty value. For example, this line would be logged: \"mv.help.text\" = \"\";")
+    var logEmptyValues: Bool = false
     
-    // Set this to true to also check if a key has an empty value. For example, this line would be logged: "mv.help.text" = "";
-    // This will add a message in log when an empty value is found.
-    static let logEmptyValues = true
-    
-    // Set this to true to print when a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)
-    static let anxiousMode = false
+    @Flag(help: "Add this option to print each time a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)")
+    var anxiousMode: Bool = false
     
     // MARK: - Main
-    static func main() async throws {
+    func run() {
         
         print("👋 Welcome in LocalizableChecker")
         print("This tool will check if keys from a Localizable.strings file are unused in your project.")
         print("Created by Jonathan Gander")
         print("--------------------------------------------------------\n")
 
-        print("Will check keys from file...\n\t\(sourceFilePath)\nin files from directory...\n\t\(projectPath)\n")
-        
-        if allowedFilesExtensions.count > 0 {
-            print("ℹ️ Will only check in files with extensions: \(allowedFilesExtensions.joined(separator: ", ")).\n")
-        }
+        print("Will check keys from file...\n\t\(sourceFilePath)")
+        printMessageExtensions()
         
         if logEmptyValues {
             print("ℹ️ Empty values will be logged.\n")
@@ -56,28 +57,28 @@ struct LocalizableChecker {
             print("ℹ️ Anxious mode is enabled. It will print a lot of text. Set anxiousMode variable to false to only log unused keys.\n")
         }
         
-        print("Ready? Tap any key to start.")
-        let _ = readLine()
         print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
         
         foreachLine(inFile: sourceFilePath, apply: { line in
-            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, expectedMinimalNbTimes: expectedMinimalNbTimes)
+            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes)
         })
         
         print("\n🎉 finished!")
     }
     
+    // MARK: -
     /// Check if current line is used in all files from directory.
     /// - Parameters:
     ///   - line: line to check
     ///   - directory: root directory where to check files
+    ///   - withExtensions: if set will only search in files with those extensions. If array is empty, search in all files.
     ///   - expectedMinimalNbTimes: number of times the key is at least and can be considered like unused if less or equal to this value
-    static func checkUnusedKey(fromLine line: String, inFilesInDirectory directory: String, expectedMinimalNbTimes: Int) {
+    private func checkUnusedKey(fromLine line: String, inFilesInDirectory directory: String, withExtensions: [String], expectedMinimalNbTimes: Int) {
         
         guard let key = getKey(line) else { return }
         
         var nbFound = 0
-        foreachFile(inDirectory: directory, recursive: true, apply: { filePath in
+        foreachFile(inDirectory: directory, withExtensions: withExtensions, recursive: true, apply: { filePath in
             foreachLine(inFile: filePath, apply: { line in
                 if line.contains(key) {
                     nbFound += 1
@@ -98,7 +99,7 @@ struct LocalizableChecker {
     /// - Parameters:
     ///   - filePath: file path
     ///   - apply: function to apply to each line. Takes a line as parameter.
-    static func foreachLine(inFile filePath: String, apply: (String) -> Void) {
+    private func foreachLine(inFile filePath: String, apply: (String) -> Void) {
         guard let contents = try? String(contentsOfFile: filePath) else { return }
         let lines = contents.split(separator:"\n")
         for line in lines {
@@ -106,13 +107,12 @@ struct LocalizableChecker {
         }
     }
     
-    
-    /// Browse each file of a directory and apply a function on each
     /// - Parameters:
     ///   - directory: root directory
+    ///   - allowedExtensions: if set will only browse files with those extensions. If array is empty, browse all files.
     ///   - recursive: set to true to browse subdirectories
     ///   - apply: function to apply to each file. Takes file path as parameters
-    static func foreachFile(inDirectory directory: String, recursive: Bool = false, apply: (String) -> Void) {
+    private func foreachFile(inDirectory directory: String, withExtensions allowedExtensions: [String], recursive: Bool = false, apply: (String) -> Void) {
         
         let fileManager = FileManager.default
         
@@ -125,11 +125,11 @@ struct LocalizableChecker {
             if isDirectory(itemURL) {
                 
                 if recursive {
-                    foreachFile(inDirectory: itemURL.path, recursive: recursive, apply: apply)
+                    foreachFile(inDirectory: itemURL.path, withExtensions: allowedExtensions, recursive: recursive, apply: apply)
                 }
             }
             else {
-                if allowedFilesExtensions.count == 0 || allowedFilesExtensions.contains(itemURL.pathExtension.lowercased()) {
+                if allowedExtensions.count == 0 || allowedExtensions.contains(itemURL.pathExtension.lowercased()) {
                     apply(itemURL.path)
                 }
             }
@@ -141,7 +141,7 @@ struct LocalizableChecker {
     /// Check if URL is a directory
     /// - Parameter url: url to check
     /// - Returns: true if directory
-    static func isDirectory(_ url: URL) -> Bool {
+    private func isDirectory(_ url: URL) -> Bool {
         var isDirectory: ObjCBool = false
         return FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) && isDirectory.boolValue
     }
@@ -151,7 +151,7 @@ struct LocalizableChecker {
     /// Example: "key" = "value";
     /// - Parameter line: line to check
     /// - Returns: true if line is a key and value
-    static func isKeyValueLine(_ line: String) -> Bool {
+    private func isKeyValueLine(_ line: String) -> Bool {
         let line = line.trimmingCharacters(in: .whitespacesAndNewlines)
         
         // Starts with " and finish with ;
@@ -167,7 +167,7 @@ struct LocalizableChecker {
     /// Returns key from a line. nil if line is not a key and value line.
     /// - Parameter line: line to get key from
     /// - Returns: key or nil
-    static func getKey(_ line: String) -> String? {
+    private func getKey(_ line: String) -> String? {
         guard isKeyValueLine(line) else { return nil }
         
         let components = line.split(separator: "=")
@@ -183,5 +183,23 @@ struct LocalizableChecker {
         }
         
         return key
+    }
+    
+    // MARK: -
+    private func printMessageExtensions() {
+        var str = "in"
+        
+        if allowedFilesExtensions.count == 0 {
+            str += " all files"
+        }
+        else if allowedFilesExtensions.count == 1 {
+            str += " files with extension \(allowedFilesExtensions.first!)"
+        }
+        else if allowedFilesExtensions.count > 1 {
+            str += " files with extensions \(allowedFilesExtensions.joined(separator: ", "))"
+        }
+        
+        str += " from directory...\n\t\(projectPath)\n"
+        print(str)
     }
 }
