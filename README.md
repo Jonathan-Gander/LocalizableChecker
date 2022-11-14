@@ -22,7 +22,7 @@ There are 3 mandatory arguments:
 - `source-file-path`: The path to your `Localizable.strings` file where are the keys to check (including filename and its extension).
 - `project-path`: The path to your project or directory in which each key will be check. Note that your `Localizable.strings` file can be in this directory also.
 - `allow-nb-times`: Number of times each key will be found at least. For example, if you search in all files and your project directory contains two `Localizable.strings` files (one for each language), this value should be 2. Because you are sure all keys will be found at least two times. That means, if a key is found two times (or less), it is unused in your project because it only appears in your two `Localizable.strings` files.  
-If you set 'extensions' option (see below) to only search in .swift files for example, you can set this argument to 0.
+If you have set `extensions` option (see below) to only search in Swift files for example, you can set this argument to 0.
 
 And 3 options:
 
