@@ -59,6 +59,18 @@ struct LocalizableChecker: ParsableCommand {
         
         print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
         
+        // Check input file and directory
+        if !FileManager.default.fileExists(atPath: sourceFilePath) {
+            print("⛔️ File \(sourceFilePath) does not exist. Could not start tool.")
+            return
+        }
+        
+        if !FileManager.default.fileExists(atPath: projectPath) {
+            print("⛔️ Directory \(projectPath) does not exist. Could not start tool.")
+            return
+        }
+        
+        // Run
         foreachLine(inFile: sourceFilePath, apply: { line in
             checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes)
         })
