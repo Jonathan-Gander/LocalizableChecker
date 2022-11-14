@@ -57,7 +57,7 @@ struct LocalizableChecker: ParsableCommand {
             print("ℹ️ Anxious mode is enabled. It will print a lot of text. Set anxiousMode variable to false to only log unused keys.\n")
         }
         
-        print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, try setting anxiousMode to true.)\n")
+        print("🚀 running ...\n(It may take quite long! If you see nothing and it makes you anxious, enable anxious mode option.)\n")
         
         // Check input file and directory
         if !FileManager.default.fileExists(atPath: sourceFilePath) {
