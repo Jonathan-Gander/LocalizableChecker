@@ -32,6 +32,10 @@ struct LocalizableChecker: ParsableCommand {
     })
     var allowedFilesExtensions: [String] = []
     
+    @Flag(name: [.customLong("swiftgen"), .long],
+          help: "Set this flag if your project uses SwiftGen. Currently, the default prefix is 'L.'")
+    var isSwiftGenProject: Bool = false
+    
     @Flag(help: "Add this option to also check if a key has an empty value. For example, this line would be logged: \"mv.help.text\" = \"\";")
     var logEmptyValues: Bool = false
     
@@ -72,7 +76,7 @@ struct LocalizableChecker: ParsableCommand {
         
         // Run
         foreachLine(inFile: sourceFilePath, apply: { line in
-            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes)
+            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes, isSwiftGenFormat: true)
         })
         
         print("\n🎉 finished!")
@@ -85,14 +89,14 @@ struct LocalizableChecker: ParsableCommand {
     ///   - directory: root directory where to check files
     ///   - withExtensions: if set will only search in files with those extensions. If array is empty, search in all files.
     ///   - expectedMinimalNbTimes: number of times the key is at least and can be considered like unused if less or equal to this value
-    private func checkUnusedKey(fromLine line: String, inFilesInDirectory directory: String, withExtensions: [String], expectedMinimalNbTimes: Int) {
+    private func checkUnusedKey(fromLine line: String, inFilesInDirectory directory: String, withExtensions: [String], expectedMinimalNbTimes: Int, isSwiftGenFormat: Bool) {
         
         guard let key = getKey(line) else { return }
         
         var nbFound = 0
         foreachFile(inDirectory: directory, withExtensions: withExtensions, recursive: true, apply: { filePath in
             foreachLine(inFile: filePath, apply: { line in
-                if line.contains(key) {
+                if line.contains(key, isSwiftGenFormat: isSwiftGenFormat) {
                     nbFound += 1
                 }
             })
@@ -223,3 +227,17 @@ struct LocalizableChecker: ParsableCommand {
         print(str)
     }
 }
+
+// MARK: - Extensions
+extension String {
+    func contains(_ key: String, isSwiftGenFormat: Bool) -> Bool {
+        if isSwiftGenFormat {
+            let prefix = "L."
+            let key = prefix + key.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+            return self.range(of: key, options: .caseInsensitive) != nil
+        } else {
+            return self.contains(key)
+        }
+    }
+}
+
