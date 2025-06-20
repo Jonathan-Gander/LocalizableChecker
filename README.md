@@ -24,11 +24,12 @@ There are 3 mandatory arguments:
 - `allow-nb-times`: Number of times each key will be found at least. For example, if you search in all files and your project directory contains two `Localizable.strings` files (one for each language), this value should be 2. Because you are sure all keys will be found at least two times. That means, if a key is found two times (or less), it is unused in your project because it only appears in your two `Localizable.strings` files.  
 If you have set `extensions` option (see below) to only search in Swift files for example, you can set this argument to 0.
 
-And 3 options:
+And 4 options:
 
 - `--extensions` or `--allowed-files-extensions`: You can choose to only search in files with specific extensions. For example, if you want to check only in Swift files, you can set this option to `swift` (do not add the dot). If you want to specify many extensions, write them spearated by a comma: `swift,m`.    
 Setting specific extensions will make faster search.
 - `--log-empty-values`: Add this option to also log if a key has an empty value. For example `"mv.help.text" = "";` would log the key because its value is an empty string.
+- `--swiftgen`: Set this flag if your project uses [SwiftGen](https://github.com/SwiftGen/SwiftGen). When set, your keys will be prefixed with `L.` and searched case-insensitively, allowing you to actually find all unsued keys
 - `--anxious-mode`: Add this option to print each time a key is found in project. It will add more log and reduce your anxiety of seeing nothing printed. ;)
 
 ### Run
