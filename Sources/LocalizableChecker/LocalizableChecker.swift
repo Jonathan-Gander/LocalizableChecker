@@ -76,7 +76,7 @@ struct LocalizableChecker: ParsableCommand {
         
         // Run
         foreachLine(inFile: sourceFilePath, apply: { line in
-            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes, isSwiftGenFormat: true)
+            checkUnusedKey(fromLine: line, inFilesInDirectory: projectPath, withExtensions: allowedFilesExtensions, expectedMinimalNbTimes: allowNbTimes, isSwiftGenFormat: isSwiftGenProject)
         })
         
         print("\n🎉 finished!")
